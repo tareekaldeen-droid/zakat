@@ -2172,22 +2172,23 @@
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  padding: 0 1.2rem;
-  transition: 
-    max-height 0.45s cubic-bezier(0.4, 0.2, 0.2, 1),
-    opacity 0.35s ease,
-    box-shadow 0.3s;
-  box-shadow: none;
-  background: linear-gradient(135deg, #f0f9f7 60%, #e8f5f1 100%);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  transition: max-height 0.4s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.3s;
+  padding: 0 1rem;
 }
 
 .accordion-content.active {
-  max-height: 1000px; /* يكفي للمحتوى الطويل */
+  max-height: 2000px; /* رقم كبير يكفي لأي محتوى */
   opacity: 1;
-  box-shadow: 0 6px 24px rgba(41, 180, 166, 0.11);
-  padding-bottom: 1.3rem;
+  padding: 1rem;
+  overflow: visible; /* يظهر كل النص في الكمبيوتر */
+}
+
+/* للهواتف فقط: اجعل المحتوى قابل للتمرير إذا كان طويل */
+@media (max-width: 600px) {
+  .accordion-content.active {
+    max-height: 60vh; /* لا يتجاوز 60% من الشاشة */
+    overflow: auto;
+  }
 }
 
 /* تأثير دوران واهتزاز للأيقونة */
@@ -12634,14 +12635,16 @@
 
         // انتظر حتى يُفتح الأكوردين تماماً (transition)
         setTimeout(() => {
-            let nav = document.querySelector('.top-nav');
-            let navHeight = nav ? nav.offsetHeight : 0;
-            let rect = header.getBoundingClientRect();
-            let absoluteY = window.pageYOffset + rect.top;
-            window.scrollTo({
-                top: absoluteY - navHeight - 5, // 5px هامش صغير
-                behavior: 'smooth'
-            });
+let nav = document.querySelector('.top-nav');
+let navHeight = nav ? nav.offsetHeight : 0;
+let fixedMargin = 14; // المسافة الموحدة التي تريدها بين الشريط العلوي والأكوردين
+let rect = header.getBoundingClientRect();
+let absoluteY = window.pageYOffset + rect.top;
+window.scrollTo({
+    top: absoluteY - navHeight - fixedMargin,
+    behavior: 'smooth'
+});
+
         }, 400); // نفس مدة transition في CSS الأكوردين
     }
 }
