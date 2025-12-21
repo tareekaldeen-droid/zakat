@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة الزكاة الذكية | Zekât Hesaplayıcı</title>
     <meta name="description" content="تطبيق ويب متكامل لحساب الزكاة الشرعية بمختلف أنواعها - Zekât hesaplama uygulaması">
+    
+
+<!-- في قسم <head> أضف: -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+
+    <!-- مكتبة jsPDF لإنشاء ملفات PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Lateef&family=Cairo&family=Roboto&family=Merriweather&family=Pacifico&display=swap" rel="stylesheet">
+
+
+<!-- خط عربي من Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+
+<!-- مكتبة لدعم النصوص العربية في jsPDF -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf-arabic@1.0.1/dist/jspdf-arabic.min.js"></script>
 
 
 
@@ -17239,44 +17257,5 @@ async function shareText(button) {
         console.log('%c🤲 تقبل الله منا ومنكم صالح الأعمال', 'color: #0d7c66; font-size: 14px; font-weight: bold;');
 
     </script>
-
-
-<!-- الخطوط (لن تعطل الصفحة إذا فشلت) -->
-<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Lateef&family=Cairo&family=Roboto&family=Merriweather&family=Pacifico&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-
-<!-- المكتبات البرمجية مع خاصية defer -->
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf-arabic@1.0.1/dist/jspdf-arabic.min.js" defer></script>
-
-<!-- كود حماية لمنع الخطأ عند الضغط على زر PDF بدون نت -->
-<script>
-    // ننتظر تحميل الصفحة بالكامل
-    window.addEventListener('load', function() {
-        // نحتفظ بالدالة الأصلية
-        if (typeof window.generateAndSharePDF === 'function') {
-            const originalPDFParams = window.generateAndSharePDF;
-            
-            // نستبدل الدالة بدالة ذكية تفحص وجود المكتبات
-            window.generateAndSharePDF = function() {
-                // فحص هل المكتبات تم تحميلها أم لا (بسبب انقطاع النت)
-                if (typeof window.jspdf === 'undefined' || typeof window.html2canvas === 'undefined') {
-                    // رسالة تنبيه جميلة بدلاً من تعليق التطبيق
-                    showToast(
-                        currentLanguage === 'ar' ? 
-                        '⚠️ لا يوجد إنترنت: خدمة PDF غير متاحة، لكن الحاسبة تعمل بنجاح.' : 
-                        '⚠️ İnternet yok: PDF servisi kullanılamıyor, ancak hesap makinesi çalışıyor.',
-                        'warning'
-                    );
-                } else {
-                    // إذا المكتبات موجودة، شغل الدالة الأصلية
-                    originalPDFParams();
-                }
-            };
-        }
-    });
-
-
 </body>
 </html>
