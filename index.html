@@ -17711,30 +17711,35 @@ function loadSavedFont() {
 }
 
     </script>
-<!-- ربط ملف المانيفست -->
-<link rel="manifest" href="manifest.json">
-<!-- دعم هواتف آيفون -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="حاسبة الزكاة">
-<link rel="apple-touch-icon" href="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=192,h=192,fit=crop/a5oqci6YCwpNHTpH/whatsapp-image-2025-12-19-at-11.11.04-am-fDCDqijtAhLk7CFm.png">
+    <!-- ============================================ -->
+    <!-- إعدادات التطبيق التقدمي (PWA) للعمل بدون اتصال -->
+    <!-- ============================================ -->
+    
+    <!-- تعريف التطبيق للهاتف (Manifest) مدمج ليعمل كملف واحد -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"حاسبة الزكاة الذكية","short_name":"الزكاة","description":"تطبيق متكامل لحساب الزكاة الشرعية","start_url":".","display":"standalone","background_color":"#f5f9f7","theme_color":"#0d7c66","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/2942/2942254.png","sizes":"512x512","type":"image/png"}]}'>
+    
+    <!-- إعدادات آيفون وأندرويد -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942254.png">
 
-<script>
-  // تسجيل الـ Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('✅ تم تفعيل وضع العمل بدون اتصال بنجاح!'))
-        .catch(err => console.log('❌ فشل تفعيل وضع العمل بدون اتصال', err));
-    });
-  }
-</script>
-
-
-
-
-
+    <script>
+        // تسجيل محرك التشغيل أوفلاين (Service Worker)
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            window.addEventListener('load', () => {
+                // إنشاء ملف التشغيل برمجياً لضمان عمله من ملف واحد
+                const swCode = `
+                    const CACHE_NAME = 'zakat-v3';
+                    self.addEventListener('install', e => self.skipWaiting());
+                    self.addEventListener('fetch', e => {
+                        e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                    });
+                `;
+                const blob = new Blob([swCode], { type: 'text/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(blob));
+            });
+        }
+    </script>
 
 </body>
 </html>
-
