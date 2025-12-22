@@ -17730,5 +17730,31 @@ function loadSavedFont() {
   }
 </script>
 
+
+<!-- إضافة المانيفست مباشرة عبر رابط Data URI ليعمل كملف واحد -->
+<link rel="manifest" href='data:application/manifest+json,{"name":"حاسبة الزكاة","short_name":"الزكاة","start_url":".","display":"standalone","background_color":"#f5f9f7","theme_color":"#0d7c66","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/2942/2942254.png","sizes":"512x512","type":"image/png"}]}'>
+
+<script>
+// كود ذكي للتعامل مع وضع التنزيل (Local File) ووضع الويب (PWA)
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => {
+        const swCode = `
+            const CACHE_NAME = 'zakat-cache-v1';
+            self.addEventListener('install', e => {
+                const content = '/* سيتم تخزين الصفحة تلقائياً */';
+                e.waitUntil(caches.open(CACHE_NAME));
+            });
+            self.addEventListener('fetch', e => {
+                e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+            });
+        `;
+        const blob = new Blob([swCode], { type: 'text/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob));
+    });
+}
+</script>
+
+
+
 </body>
 </html>
